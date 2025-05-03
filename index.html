@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KashBoard - Smart Finance Management</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="container">
+                <div class="logo">
+                    <h1>KashBoard</h1>
+                    <p class="tagline">Smart Finance Management</p>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#dashboard" class="active">Dashboard</a></li>
+                        <li><a href="#income">Income</a></li>
+                        <li><a href="#expenses">Expenses</a></li>
+                        <li><a href="#budget">Budget</a></li>
+                        <li><a href="#reports">Reports</a></li>
+                        <li><a href="#settings">Settings</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section-active">
+                <div class="container">
+                    <div class="dashboard-header">
+                        <h2>Dashboard</h2>
+                        <div class="date-selector">
+                            <button id="prev-month" aria-label="Previous month"><i class="fas fa-chevron-left"></i></button>
+                            <span id="current-period">May 2025</span>
+                            <button id="next-month" aria-label="Next month"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-summary">
+                        <div class="summary-card income-summary">
+                            <h3>Income</h3>
+                            <div class="amount">₹0.00</div>
+                            <div class="trend">0% <i class="fas fa-equals"></i></div>
+                        </div>
+                        <div class="summary-card expenses-summary">
+                            <h3>Expenses</h3>
+                            <div class="amount">₹0.00</div>
+                            <div class="trend">0% <i class="fas fa-equals"></i></div>
+                        </div>
+                        <div class="summary-card balance-summary">
+                            <h3>Balance</h3>
+                            <div class="amount">₹0.00</div>
+                            <div class="savings">Savings: 0%</div>
+                        </div>
+                    </div>
+
+                    <div class="charts-container">
+                        <div class="chart-wrapper">
+                            <h3>Income vs Expenses</h3>
+                            <canvas id="income-expense-chart" class="chart"></canvas>
+                        </div>
+                        <div class="chart-wrapper">
+                            <h3>Expense Breakdown</h3>
+                            <canvas id="expense-breakdown-chart" class="chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="smart-allocation">
+                        <h3>KashBot Smart Allocation</h3>
+                        <p class="allocation-intro">Based on your financial profile, here's how your money should be allocated:</p>
+                        <div class="allocation-cards">
+                            <div class="allocation-card savings">
+                                <i class="icon fas fa-piggy-bank"></i>
+                                <div class="category">Savings</div>
+                                <div class="amount">₹0.00</div>
+                                <div class="percentage">20% of income</div>
+                            </div>
+                            <div class="allocation-card investment">
+                                <i class="icon fas fa-chart-line"></i>
+                                <div class="category">Investment</div>
+                                <div class="amount">₹0.00</div>
+                                <div class="percentage">10% of income</div>
+                            </div>
+                            <div class="allocation-card emergency">
+                                <i class="icon fas fa-first-aid"></i>
+                                <div class="category">Emergency Fund</div>
+                                <div class="amount">₹0.00</div>
+                                <div class="percentage">5% of income</div>
+                            </div>
+                            <div class="allocation-card leisure">
+                                <i class="icon fas fa-umbrella-beach"></i>
+                                <div class="category">Leisure</div>
+                                <div class="amount">₹0.00</div>
+                                <div class="percentage">5% of income</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tips-container">
+                        <h3>KashBot Tips</h3>
+                        <div class="tip-card success">
+                            <div class="tip-icon"><i class="fas fa-lightbulb"></i></div>
+                            <div class="tip-content">
+                                <p class="tip-message">Add your income and expenses to get personalized financial insights.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Income Section -->
+            <section id="income">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Income Management</h2>
+                        <button class="btn btn-primary" data-target="income-modal">Add Income</button>
+                    </div>
+
+                    <div class="action-bar">
+                        <div class="filter-options">
+                            <input type="text" id="income-search" class="search-input" placeholder="Search income...">
+                            <select id="income-filter" class="filter-select">
+                                <option value="all">All Categories</option>
+                                <option value="Salary">Salary</option>
+                                <option value="Business">Business</option>
+                                <option value="Freelance">Freelance</option>
+                                <option value="Investment">Investment</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="income-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="empty-table-message">No income data available. Add your first income entry.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Expenses Section -->
+            <section id="expenses">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Expense Management</h2>
+                        <button class="btn btn-primary" data-target="expense-modal">Add Expense</button>
+                    </div>
+
+                    <div class="action-bar">
+                        <div class="filter-options">
+                            <input type="text" id="expense-search" class="search-input" placeholder="Search expenses...">
+                            <select id="expense-filter" class="filter-select">
+                                <option value="all">All Categories</option>
+                                <option value="Food">Food</option>
+                                <option value="Housing">Housing</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Utilities">Utilities</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table id="expense-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="empty-table-message">No expense data available. Add your first expense entry.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Budget Section -->
+            <section id="budget">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Budget Planning</h2>
+                        <button class="btn btn-primary" data-target="budget-modal">Create Budget</button>
+                    </div>
+
+                    <div class="budget-overview">
+                        <h3>Monthly Budget Overview</h3>
+                        <div class="budget-cards">
+                            <!-- Budget cards will be dynamically generated -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reports Section -->
+            <section id="reports">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Financial Reports</h2>
+                    </div>
+
+                    <div class="report-filters">
+                        <div class="filter-group">
+                            <label for="report-period">Period:</label>
+                            <select id="report-period">
+                                <option value="1month">Last Month</option>
+                                <option value="3months">Last 3 Months</option>
+                                <option value="6months" selected>Last 6 Months</option>
+                                <option value="1year">Last Year</option>
+                                <option value="custom">Custom Range</option>
+                            </select>
+                        </div>
+                        <div class="filter-group date-range" style="display: none;">
+                            <label for="report-start-date">From:</label>
+                            <input type="date" id="report-start-date">
+                            <label for="report-end-date">To:</label>
+                            <input type="date" id="report-end-date">
+                            <button class="btn-secondary" id="apply-date-range">Apply</button>
+                        </div>
+                    </div>
+
+                    <div class="reports-container">
+                        <div class="report-card">
+                            <h3>Income vs Expenses Trend</h3>
+                            <canvas id="trends-chart" class="report-chart"></canvas>
+                        </div>
+                        <div class="report-card">
+                            <h3>Savings Progress</h3>
+                            <canvas id="savings-chart" class="report-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Settings</h2>
+                    </div>
+
+                    <div class="settings-grid">
+                        <div class="settings-card">
+                            <h3>General Settings</h3>
+                            <div class="form-group">
+                                <label for="currency">Currency</label>
+                                <select id="currency" class="full-width">
+                                    <option value="INR">Indian Rupee (₹)</option>
+                                    <option value="USD">US Dollar ($)</option>
+                                    <option value="EUR">Euro (€)</option>
+                                    <option value="GBP">British Pound (£)</option>
+                                    <option value="JPY">Japanese Yen (¥)</option>
+                                    <option value="CAD">Canadian Dollar ($)</option>
+                                    <option value="AUD">Australian Dollar ($)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="theme">Theme</label>
+                                <div class="theme-selector">
+                                    <button class="theme-btn light-theme active" data-theme="light">Light</button>
+                                    <button class="theme-btn dark-theme" data-theme="dark">Dark</button>
+                                    <button class="theme-btn system-theme" data-theme="system">System</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3>Data Management</h3>
+                            <div class="form-group">
+                                <button class="btn-secondary full-width" id="export-data">Export Data</button>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn-secondary full-width" id="import-data">Import Data</button>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn-danger full-width" id="clear-data">Clear All Data</button>
+                            </div>
+                        </div>
+
+                        <div class="settings-card">
+                            <h3>KashBot Settings</h3>
+                            <div class="form-group">
+                                <label for="savings-target">Monthly Savings Target (%)</label>
+                                <input type="range" id="savings-target" min="5" max="50" step="1" value="20">
+                                <div class="range-value"><span id="savings-target-value">20%</span></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="kashbot-tips">KashBot Tips</label>
+                                <div class="toggle-switch">
+                                    <input type="checkbox" id="kashbot-tips" checked>
+                                    <span class="toggle-slider"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-primary" id="save-settings">Save Settings</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p>&copy; 2025 KashBoard. Smart Finance Management.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="income-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Add Income</h3>
+            <form id="income-form">
+                <div class="form-group">
+                    <label for="income-date">Date</label>
+                    <input type="date" id="income-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="income-category">Category</label>
+                    <select id="income-category" required>
+                        <option value="">Select a category</option>
+                        <option value="Salary">Salary</option>
+                        <option value="Business">Business</option>
+                        <option value="Freelance">Freelance</option>
+                        <option value="Investment">Investment</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="income-description">Description</label>
+                    <input type="text" id="income-description" placeholder="E.g. Monthly salary" required>
+                </div>
+                <div class="form-group">
+                    <label for="income-amount">Amount</label>
+                    <input type="number" id="income-amount" step="0.01" min="0" placeholder="0.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="income-notes">Notes (optional)</label>
+                    <textarea id="income-notes" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary cancel-modal">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Income</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="expense-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Add Expense</h3>
+            <form id="expense-form">
+                <div class="form-group">
+                    <label for="expense-date">Date</label>
+                    <input type="date" id="expense-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="expense-category">Category</label>
+                    <select id="expense-category" required>
+                        <option value="">Select a category</option>
+                        <option value="Food">Food</option>
+                        <option value="Housing">Housing</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="Utilities">Utilities</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="expense-description">Description</label>
+                    <input type="text" id="expense-description" placeholder="E.g. Grocery shopping" required>
+                </div>
+                <div class="form-group">
+                    <label for="expense-amount">Amount</label>
+                    <input type="number" id="expense-amount" step="0.01" min="0" placeholder="0.00" required>
+                </div>
+                <div class="form-group">
+                    <label for="expense-notes">Notes (optional)</label>
+                    <textarea id="expense-notes" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="expense-receipt">Upload Receipt (optional)</label>
+                    <input type="file" id="expense-receipt" accept="image/*,.pdf">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary cancel-modal">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Expense</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- JavaScript Files -->
+    <script src="js/utils/storage.js"></script>
+    <script src="js/models/models.js"></script>
+    <script src="js/services/dataService.js"></script>
+    <script src="js/services/kashbotService.js"></script>
+    <script src="js/components/ui.js"></script>
+    <script src="js/components/charts.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
