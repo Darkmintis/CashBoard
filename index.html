@@ -5,6 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KashBoard - Smart Finance Management</title>
     
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Your Private Money Mentor. No Cloud. No Ads. Just Clarity. Track income, manage expenses, and get smart financial insights.">
+    <meta name="keywords" content="personal finance, budgeting, expense tracking, money management, financial dashboard, privacy-first">
+    <meta name="author" content="KashBoard">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kashboard.app/">
+    <meta property="og:title" content="KashBoard - Smart Finance Management">
+    <meta property="og:description" content="Your Private Money Mentor. No Cloud. No Ads. Just Clarity.">
+    <meta property="og:image" content="images/kashboard-preview.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kashboard.app/">
+    <meta property="twitter:title" content="KashBoard - Smart Finance Management">
+    <meta property="twitter:description" content="Your Private Money Mentor. No Cloud. No Ads. Just Clarity.">
+    <meta property="twitter:image" content="images/kashboard-preview.png">
+    
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="KashBoard">
+    <link rel="apple-touch-icon" href="images/icon-192x192.png">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="shortcut icon" href="favicon.ico">
+    
     <!-- CSS Files -->
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/styles.css">
@@ -19,6 +51,11 @@
     
     <!-- Chart.js for data visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
 </head>
 <body>
     <div class="app-container">
@@ -444,5 +481,156 @@
     <script src="js/components/ui.js"></script>
     <script src="js/components/charts.js"></script>
     <script src="js/app.js"></script>
+    
+    <!-- PWA Installation Script -->
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+
+        // PWA Install Prompt
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            deferredPrompt = e;
+            
+            // Show install button/banner
+            showInstallPromotion();
+        });
+
+        function showInstallPromotion() {
+            // Create install banner if it doesn't exist
+            if (!document.getElementById('install-banner')) {
+                const banner = document.createElement('div');
+                banner.id = 'install-banner';
+                banner.className = 'install-banner';
+                banner.innerHTML = `
+                    <div class="install-content">
+                        <i class="fas fa-download"></i>
+                        <span>Install KashBoard for a better experience</span>
+                        <button id="install-btn" class="install-btn">Install</button>
+                        <button id="dismiss-btn" class="dismiss-btn">&times;</button>
+                    </div>
+                `;
+                document.body.appendChild(banner);
+
+                // Install button click
+                document.getElementById('install-btn').addEventListener('click', () => {
+                    // Hide the banner
+                    banner.style.display = 'none';
+                    // Show the prompt
+                    deferredPrompt.prompt();
+                    // Wait for the user to respond to the prompt
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the A2HS prompt');
+                        }
+                        deferredPrompt = null;
+                    });
+                });
+
+                // Dismiss button click
+                document.getElementById('dismiss-btn').addEventListener('click', () => {
+                    banner.style.display = 'none';
+                    localStorage.setItem('install-dismissed', Date.now());
+                });
+
+                // Auto-hide after 10 seconds
+                setTimeout(() => {
+                    if (banner.style.display !== 'none') {
+                        banner.style.display = 'none';
+                    }
+                }, 10000);
+            }
+        }
+
+        // App installation success
+        window.addEventListener('appinstalled', (evt) => {
+            console.log('KashBoard was installed');
+            // Hide install promotion
+            const banner = document.getElementById('install-banner');
+            if (banner) banner.style.display = 'none';
+        });
+    </script>
+    
+    <!-- Install Banner Styles -->
+    <style>
+        .install-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 12px 16px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transform: translateY(-100%);
+            animation: slideDown 0.3s ease forwards;
+        }
+        
+        .install-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .install-btn {
+            background: white;
+            color: #4CAF50;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .install-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .dismiss-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px 8px;
+            margin-left: auto;
+        }
+        
+        @keyframes slideDown {
+            to {
+                transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .install-content span {
+                font-size: 14px;
+            }
+            
+            .install-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
 </body>
 </html>
