@@ -3,19 +3,16 @@
  * Basic offline functionality and caching
  */
 
-const CACHE_NAME = 'CashBoard-v1';
+const CACHE_NAME = 'cashboard-v2';
 
 // Files to cache for offline use
 const FILES_TO_CACHE = [
   '/',
   '/index.html',
   '/css/normalize.css',
-  '/css/styles.css',
-  '/css/components.css',
-  '/css/dashboard.css',
+  '/css/main.css',
   '/js/app.js',
   '/js/utils/storage.js',
-  '/js/models/models.js',
   '/js/services/dataService.js',
   '/js/services/cashbotService.js',
   '/js/components/ui.js',
