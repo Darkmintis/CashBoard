@@ -250,8 +250,6 @@ const StorageUtil = {
         language: 'en',
         notifications: true,
         dateFormat: 'DD/MM/YYYY',
-        savingsTarget: 20,
-        cashbotTips: true,
         firstTimeSetup: true
     },
     

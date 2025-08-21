@@ -14,7 +14,6 @@ A privacy-first, local-only personal finance management application that helps y
 - **Income Tracking**: Record salary, freelance, business income with categorization
 - **Expense Monitoring**: Track spending across customizable categories
 - **Budget Planning**: Set and monitor budgets with visual progress indicators
-- **Smart Allocation**: AI-powered spending suggestions and savings goals
 
 ### 🔒 **Privacy & Security**
 - **100% Local Storage**: All data stays on your device
@@ -24,7 +23,6 @@ A privacy-first, local-only personal finance management application that helps y
 
 ### 📊 **Insights & Analytics**
 - **Visual Charts**: Interactive expense and income visualizations
-- **CashBot Tips**: Personalized financial recommendations
 - **Progress Tracking**: Savings goals and budget monitoring
 - **Trend Analysis**: Monthly and yearly financial patterns
 
@@ -76,8 +74,7 @@ CashBoard/
 │   │   ├── ui.js             # User interface components
 │   │   └── charts.js         # Chart visualizations
 │   └── 🚀 services/
-│       ├── dataService.js    # Data management service
-│       └── cashbotService.js # Smart financial suggestions
+│       └── dataService.js    # Data management service
 └── 📋 docs/
     ├── CHANGELOG.md          # Version history
     └── README.md            # This file
@@ -117,18 +114,14 @@ CashBoard/
 - **No Registration**: No accounts, emails, or sign-ups required
 
 ### Intelligence
-- **CashBot Engine**: Smart spending analysis and suggestions
 - **Automated Insights**: Spending patterns and budget recommendations
 - **Goal Tracking**: Savings and financial milestone monitoring
 
-## 🤖 CashBot Features
-
-Our intelligent financial assistant provides:
+Our application provides:
 
 - **Spending Analysis**: Identify overspending categories
-- **Savings Suggestions**: Automated savings goal recommendations
 - **Budget Optimization**: Smart budget allocation based on income
-- **Financial Tips**: Personalized advice for better money management
+- **Financial Tips**: Basic money management recommendations
 
 ## 📊 Data Management
 

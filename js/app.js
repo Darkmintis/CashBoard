@@ -307,8 +307,6 @@ const App = (() => {
         
         // Get financial data
         const financialSummary = DataService.getFinancialSummary();
-        const allocations = CashBotService.generateAllocations(financialSummary, appSettings);
-        const tips = CashBotService.generateTips(financialSummary, allocations);
         
         let html = `
             <div class="dashboard-container">
@@ -331,22 +329,6 @@ const App = (() => {
                     </div>
                 </div>
                 
-                <div class="dashboard-sections">
-                    <div class="section allocation-section">
-                        <h2>CashBot Allocation</h2>
-                        <div class="allocation-container">
-                            ${renderAllocationChart(allocations)}
-                        </div>
-                    </div>
-                    
-                    <div class="section tips-section">
-                        <h2>CashBot Tips</h2>
-                        <div class="tips-container">
-                            ${renderTips(tips)}
-                        </div>
-                    </div>
-                </div>
-                
                 <div class="recent-transactions">
                     <h2>Recent Transactions</h2>
                     <div class="transactions-container">
@@ -365,64 +347,6 @@ const App = (() => {
     /**
      * Render the allocation chart for the dashboard
      * @param {Object} allocations - The allocations object
-     * @returns {string} HTML for the allocation chart
-     */
-    const renderAllocationChart = (allocations) => {
-        let html = '<div class="allocations">';
-        
-        // Create allocation bars
-        Object.values(allocations).forEach(allocation => {
-            const percentage = allocation.actualPercentage.toFixed(1);
-            const targetPercentage = allocation.targetPercentage;
-            const statusClass = allocation.status;
-            
-            html += `
-                <div class="allocation-item ${statusClass}">
-                    <div class="allocation-label">
-                        <span class="name">${allocation.name}</span>
-                        <span class="percentage">${percentage}%</span>
-                    </div>
-                    <div class="allocation-bar-container">
-                        <div class="allocation-bar" style="width: ${percentage}%"></div>
-                        <div class="target-marker" style="left: ${targetPercentage}%" title="Target: ${targetPercentage}%"></div>
-                    </div>
-                    <div class="allocation-details">
-                        <span class="actual">${formatCurrency(allocation.actualAmount)}</span>
-                        <span class="target">Target: ${formatCurrency(allocation.targetAmount)}</span>
-                    </div>
-                </div>
-            `;
-        });
-        
-        html += '</div>';
-        return html;
-    };
-    
-    /**
-     * Render financial tips
-     * @param {Array} tips - Array of tip objects
-     * @returns {string} HTML for the tips section
-     */
-    const renderTips = (tips) => {
-        if (!tips || tips.length === 0) {
-            return '<p>No tips available at this time.</p>';
-        }
-        
-        let html = '<ul class="tips-list">';
-        
-        tips.forEach(tip => {
-            html += `
-                <li class="tip-item ${tip.category}">
-                    <span class="tip-icon"></span>
-                    <p>${tip.text}</p>
-                </li>
-            `;
-        });
-        
-        html += '</ul>';
-        return html;
-    };
-    
     /**
      * Render recent transactions
      * @returns {string} HTML for recent transactions
@@ -1055,260 +979,482 @@ const App = (() => {
      * Render the reports page
      */
     const renderReportsPage = () => {
-        // Implementation for reports page rendering would go here
-        console.log('Reports page rendering would go here');
-        if (elements.contentArea) {
-            elements.contentArea.innerHTML = '<h1>Reports Page</h1><p>Financial reports would be implemented here.</p>';
-        }
-    };
-    
-    /**
-     * Render the settings page
-     */
-    const renderSettingsPage = () => {
         if (!elements.contentArea) return;
         
         let html = `
-            <div class="settings-container">
-                <h1 class="page-title">Settings</h1>
+            <div class="reports-container-page">
+                <h1 class="page-title">Financial Reports</h1>
                 
-                <div class="settings-section">
-                    <h2>General Settings</h2>
-                    
-                    <div class="setting-item">
-                        <label for="currency-setting">Currency</label>
-                        <select id="currency-setting" class="setting-input">
-                            <option value="USD" ${appSettings.currency === 'USD' ? 'selected' : ''}>USD ($)</option>
-                            <option value="EUR" ${appSettings.currency === 'EUR' ? 'selected' : ''}>EUR (€)</option>
-                            <option value="GBP" ${appSettings.currency === 'GBP' ? 'selected' : ''}>GBP (£)</option>
-                            <option value="JPY" ${appSettings.currency === 'JPY' ? 'selected' : ''}>JPY (¥)</option>
-                            <option value="CNY" ${appSettings.currency === 'CNY' ? 'selected' : ''}>CNY (¥)</option>
-                            <option value="INR" ${appSettings.currency === 'INR' ? 'selected' : ''}>INR (₹)</option>
+                <div class="report-filters">
+                    <div class="filter-group">
+                        <label for="report-period">Period:</label>
+                        <select id="report-period">
+                            <option value="1month">Last Month</option>
+                            <option value="3months">Last 3 Months</option>
+                            <option value="6months" selected>Last 6 Months</option>
+                            <option value="1year">Last Year</option>
                         </select>
                     </div>
+                </div>
+                
+                <div class="reports-grid">
+                    <div class="report-card">
+                        <h3>Income vs Expenses</h3>
+                        <canvas id="income-expense-chart" class="report-chart"></canvas>
+                    </div>
                     
-                    <div class="setting-item">
-                        <label for="theme-setting">Theme</label>
-                        <div class="theme-selector">
-                            <button id="theme-light" class="theme-button ${appSettings.theme === 'light' ? 'active' : ''}">Light</button>
-                            <button id="theme-dark" class="theme-button ${appSettings.theme === 'dark' ? 'active' : ''}">Dark</button>
+                    <div class="report-card">
+                        <h3>Expense Categories</h3>
+                        <canvas id="expense-categories-chart" class="report-chart"></canvas>
+                    </div>
+                    
+                    <div class="report-card">
+                        <h3>Monthly Trends</h3>
+                        <canvas id="monthly-trends-chart" class="report-chart"></canvas>
+                    </div>
+                    
+                    <div class="report-card">
+                        <h3>Summary Statistics</h3>
+                        <div id="summary-stats" class="stats-container">
+                            <!-- Stats will be populated here -->
                         </div>
                     </div>
-                    
-                    <div class="setting-item">
-                        <label for="notifications-setting">Notifications</label>
-                        <div class="toggle-switch">
-                            <input type="checkbox" id="notifications-setting" ${appSettings.notificationsEnabled ? 'checked' : ''}>
-                            <label for="notifications-setting"></label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="settings-section">
-                    <h2>Financial Settings</h2>
-                    
-                    <div class="setting-item">
-                        <label for="savings-target">Savings Target (%)</label>
-                        <input type="range" id="savings-target" min="5" max="50" step="1" value="${appSettings.savingsTarget}" class="setting-input">
-                        <span id="savings-target-value">${appSettings.savingsTarget}%</span>
-                    </div>
-                </div>
-                
-                <div class="settings-section">
-                    <h2>Data Management</h2>
-                    
-                    <div class="setting-item">
-                        <button id="export-data" class="action-button">Export Data</button>
-                        <button id="import-data" class="action-button">Import Data</button>
-                    </div>
-                    
-                    <div class="setting-item">
-                        <button id="reset-data" class="danger-button">Reset All Data</button>
-                    </div>
-                </div>
-                
-                <div class="settings-actions">
-                    <button id="save-settings" class="primary-button">Save Settings</button>
                 </div>
             </div>
         `;
         
         elements.contentArea.innerHTML = html;
         
-        // Set up event listeners for settings
-        const saveSettingsBtn = document.getElementById('save-settings');
-        const currencySetting = document.getElementById('currency-setting');
-        const themeLight = document.getElementById('theme-light');
-        const themeDark = document.getElementById('theme-dark');
-        const notificationsSetting = document.getElementById('notifications-setting');
-        const savingsTarget = document.getElementById('savings-target');
-        const savingsTargetValue = document.getElementById('savings-target-value');
-        const exportDataBtn = document.getElementById('export-data');
-        const importDataBtn = document.getElementById('import-data');
-        const resetDataBtn = document.getElementById('reset-data');
+        // Generate reports
+        generateReports();
         
-        if (saveSettingsBtn) {
-            saveSettingsBtn.addEventListener('click', () => {
-                // Save all settings
-                if (currencySetting) appSettings.currency = currencySetting.value;
-                if (notificationsSetting) appSettings.notificationsEnabled = notificationsSetting.checked;
-                if (savingsTarget) appSettings.savingsTarget = parseInt(savingsTarget.value);
-                
-                saveSettings();
-                alert('Settings saved successfully!');
-            });
-        }
-        
-        if (themeLight) {
-            themeLight.addEventListener('click', () => {
-                themeLight.classList.add('active');
-                if (themeDark) themeDark.classList.remove('active');
-                appSettings.theme = 'light';
-                applyTheme('light');
-            });
-        }
-        
-        if (themeDark) {
-            themeDark.addEventListener('click', () => {
-                themeDark.classList.add('active');
-                if (themeLight) themeLight.classList.remove('active');
-                appSettings.theme = 'dark';
-                applyTheme('dark');
-            });
-        }
-        
-        if (savingsTarget && savingsTargetValue) {
-            savingsTarget.addEventListener('input', () => {
-                savingsTargetValue.textContent = `${savingsTarget.value}%`;
-            });
-        }
-        
-        if (exportDataBtn) {
-            exportDataBtn.addEventListener('click', exportAppData);
-        }
-        
-        if (importDataBtn) {
-            importDataBtn.addEventListener('click', importAppData);
-        }
-        
-        if (resetDataBtn) {
-            resetDataBtn.addEventListener('click', () => {
-                if (confirm('Are you sure you want to reset all data? This cannot be undone.')) {
-                    resetAllData();
-                }
+        // Set up period filter
+        const periodSelect = document.getElementById('report-period');
+        if (periodSelect) {
+            periodSelect.addEventListener('change', () => {
+                generateReports();
             });
         }
     };
     
     /**
-     * Export application data
+     * Generate financial reports and charts
      */
-    const exportAppData = () => {
-        const allData = {
-            appSettings: appSettings,
-            user: currentUser,
-            incomeData: StorageUtil.getItem('incomeData'),
-            expenseData: StorageUtil.getItem('expenseData'),
-            savingsGoals: StorageUtil.getItem('savingsGoals'),
-            exportDate: new Date().toISOString()
-        };
+    const generateReports = () => {
+        const period = document.getElementById('report-period')?.value || '6months';
+        const data = getReportData(period);
         
-        const dataStr = JSON.stringify(allData, null, 2);
-        const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        const dataUrl = URL.createObjectURL(dataBlob);
+        // Income vs Expenses Chart
+        createIncomeExpenseChart(data);
         
-        // Create download link
-        const downloadLink = document.createElement('a');
-        downloadLink.href = dataUrl;
-        downloadLink.download = `CashBoard-export-${new Date().toISOString().slice(0, 10)}.json`;
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
+        // Expense Categories Chart
+        createExpenseCategoriesChart(data);
+        
+        // Monthly Trends Chart
+        createMonthlyTrendsChart(data);
+        
+        // Summary Statistics
+        createSummaryStats(data);
     };
     
     /**
-     * Import application data
+     * Get report data for specified period
      */
-    const importAppData = () => {
-        // Create a file input element
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'application/json';
+    const getReportData = (period) => {
+        const now = new Date();
+        let startDate = new Date();
         
-        fileInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                try {
-                    const importedData = JSON.parse(event.target.result);
-                    
-                    // Validate data format
-                    if (!importedData.appSettings || !importedData.user) {
-                        throw new Error('Invalid data format');
+        switch (period) {
+            case '1month':
+                startDate.setMonth(now.getMonth() - 1);
+                break;
+            case '3months':
+                startDate.setMonth(now.getMonth() - 3);
+                break;
+            case '6months':
+                startDate.setMonth(now.getMonth() - 6);
+                break;
+            case '1year':
+                startDate.setFullYear(now.getFullYear() - 1);
+                break;
+        }
+        
+        const incomes = StorageUtil.getItem('incomes') || [];
+        const expenses = StorageUtil.getItem('expenses') || [];
+        
+        const filteredIncomes = incomes.filter(income => 
+            new Date(income.date) >= startDate
+        );
+        
+        const filteredExpenses = expenses.filter(expense => 
+            new Date(expense.date) >= startDate
+        );
+        
+        return { incomes: filteredIncomes, expenses: filteredExpenses, startDate, endDate: now };
+    };
+    
+    /**
+     * Create Income vs Expenses chart
+     */
+    const createIncomeExpenseChart = (data) => {
+        const ctx = document.getElementById('income-expense-chart');
+        if (!ctx) return;
+        
+        const totalIncome = data.incomes.reduce((sum, income) => sum + income.amount, 0);
+        const totalExpenses = data.expenses.reduce((sum, expense) => sum + expense.amount, 0);
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Income', 'Expenses', 'Savings'],
+                datasets: [{
+                    data: [totalIncome, totalExpenses, Math.max(0, totalIncome - totalExpenses)],
+                    backgroundColor: ['#4CAF50', '#F44336', '#2196F3'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
                     }
-                    
-                    // Import the data
-                    appSettings = importedData.appSettings;
-                    currentUser = importedData.user;
-                    
-                    if (importedData.incomeData) StorageUtil.setItem('incomeData', importedData.incomeData);
-                    if (importedData.expenseData) StorageUtil.setItem('expenseData', importedData.expenseData);
-                    if (importedData.savingsGoals) StorageUtil.setItem('savingsGoals', importedData.savingsGoals);
-                    
-                    StorageUtil.setItem('appSettings', appSettings);
-                    StorageUtil.setItem('currentUser', currentUser);
-                    
-                    alert('Data imported successfully! The application will reload.');
-                    window.location.reload();
-                } catch (err) {
-                    alert(`Error importing data: ${err.message}`);
                 }
-            };
-            
-            reader.readAsText(file);
+            }
+        });
+    };
+    
+    /**
+     * Create Expense Categories chart
+     */
+    const createExpenseCategoriesChart = (data) => {
+        const ctx = document.getElementById('expense-categories-chart');
+        if (!ctx) return;
+        
+        // Group expenses by category
+        const categoryTotals = {};
+        data.expenses.forEach(expense => {
+            categoryTotals[expense.category] = (categoryTotals[expense.category] || 0) + expense.amount;
         });
         
-        // Trigger the file input dialog
-        fileInput.click();
+        const labels = Object.keys(categoryTotals);
+        const amounts = Object.values(categoryTotals);
+        const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'];
+        
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: amounts,
+                    backgroundColor: colors.slice(0, labels.length),
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
     };
     
     /**
-     * Reset all application data
+     * Create Monthly Trends chart
      */
-    const resetAllData = () => {
-        StorageUtil.clear();
-        alert('All data has been reset. The application will reload.');
-        window.location.reload();
+    const createMonthlyTrendsChart = (data) => {
+        const ctx = document.getElementById('monthly-trends-chart');
+        if (!ctx) return;
+        
+        // Group data by month
+        const monthlyData = {};
+        
+        data.incomes.forEach(income => {
+            const month = new Date(income.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+            if (!monthlyData[month]) monthlyData[month] = { income: 0, expenses: 0 };
+            monthlyData[month].income += income.amount;
+        });
+        
+        data.expenses.forEach(expense => {
+            const month = new Date(expense.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+            if (!monthlyData[month]) monthlyData[month] = { income: 0, expenses: 0 };
+            monthlyData[month].expenses += expense.amount;
+        });
+        
+        const labels = Object.keys(monthlyData).sort();
+        const incomeData = labels.map(month => monthlyData[month].income);
+        const expenseData = labels.map(month => monthlyData[month].expenses);
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Income',
+                        data: incomeData,
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Expenses',
+                        data: expenseData,
+                        borderColor: '#F44336',
+                        backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     };
     
+    /**
+     * Create Summary Statistics
+     */
+    const createSummaryStats = (data) => {
+        const container = document.getElementById('summary-stats');
+        if (!container) return;
+        
+        const totalIncome = data.incomes.reduce((sum, income) => sum + income.amount, 0);
+        const totalExpenses = data.expenses.reduce((sum, expense) => sum + expense.amount, 0);
+        const savings = totalIncome - totalExpenses;
+        const savingsRate = totalIncome > 0 ? ((savings / totalIncome) * 100).toFixed(1) : 0;
+        
+        container.innerHTML = `
+            <div class="stat-item">
+                <h4>Total Income</h4>
+                <div class="stat-value income">${formatCurrency(totalIncome)}</div>
+            </div>
+            <div class="stat-item">
+                <h4>Total Expenses</h4>
+                <div class="stat-value expense">${formatCurrency(totalExpenses)}</div>
+            </div>
+            <div class="stat-item">
+                <h4>Net Savings</h4>
+                <div class="stat-value ${savings >= 0 ? 'income' : 'expense'}">${formatCurrency(savings)}</div>
+            </div>
+            <div class="stat-item">
+                <h4>Savings Rate</h4>
+                <div class="stat-value">${savingsRate}%</div>
+            </div>
+        `;
+    };
+    
+    /**
+     * Render the settings page
+     */
+    const renderSettingsPage = () => {
+        // Since we have static HTML for settings, we just need to set up event listeners
+        // and sync the current settings with the UI
+        updateSettingsUI();
+        setupSettingsEventListeners();
+    };
+    
+    /**
+     * Update settings UI with current values
+     */
+    const updateSettingsUI = () => {
+        // Update currency select
+        const currencySelect = document.getElementById('currency');
+        if (currencySelect) {
+            currencySelect.value = appSettings.currency;
+        }
+        
+        // Update theme buttons
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        themeButtons.forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.dataset.theme === appSettings.theme) {
+                btn.classList.add('active');
+            }
+        });
+    };
+    
+    /**
+     * Set up event listeners for settings
+     */
+    const setupSettingsEventListeners = () => {
+        // Currency change
+        const currencySelect = document.getElementById('currency');
+        if (currencySelect) {
+            currencySelect.addEventListener('change', (e) => {
+                appSettings.currency = e.target.value;
+                saveSettings();
+                showNotification('Currency updated successfully');
+            });
+        }
+        
+        // Theme buttons
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        themeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const theme = btn.dataset.theme;
+                appSettings.theme = theme;
+                applyTheme(theme);
+                saveSettings();
+                
+                // Update active state
+                themeButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                showNotification(`${theme.charAt(0).toUpperCase() + theme.slice(1)} theme applied`);
+            });
+        });
+        
+        // Data export
+        const exportBtn = document.getElementById('export-data');
+        if (exportBtn) {
+            exportBtn.addEventListener('click', exportData);
+        }
+        
+        // Data import
+        const importBtn = document.getElementById('import-data');
+        if (importBtn) {
+            importBtn.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = '.json';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        importData(file);
+                    }
+                };
+                input.click();
+            });
+        }
+        
+        // Clear data
+        const clearBtn = document.getElementById('clear-data');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
+                    clearAllData();
+                    showNotification('All data cleared successfully');
+                }
+            });
+        }
+        
+        // Save settings
+        const saveBtn = document.getElementById('save-settings');
+        if (saveBtn) {
+            saveBtn.addEventListener('click', () => {
+                saveSettings();
+                showNotification('Settings saved successfully');
+            });
+        }
+    };
+    
+    /**
+     * Export user data
+     */
+    const exportData = () => {
+        try {
+            const data = {
+                incomes: StorageUtil.getItem('incomes') || [],
+                expenses: StorageUtil.getItem('expenses') || [],
+                budgets: StorageUtil.getItem('budgets') || [],
+                settings: appSettings,
+                exportDate: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `cashboard-data-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+            
+            showNotification('Data exported successfully');
+        } catch (error) {
+            console.error('Export error:', error);
+            showNotification('Failed to export data', 'error');
+        }
+    };
+    
+    /**
+     * Import user data
+     */
+    const importData = (file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                
+                if (data.incomes) StorageUtil.setItem('incomes', data.incomes);
+                if (data.expenses) StorageUtil.setItem('expenses', data.expenses);
+                if (data.budgets) StorageUtil.setItem('budgets', data.budgets);
+                if (data.settings) {
+                    appSettings = { ...appSettings, ...data.settings };
+                    saveSettings();
+                    applyTheme(appSettings.theme);
+                }
+                
+                showNotification('Data imported successfully');
+                // Refresh the current page to show imported data
+                renderPage(currentPage);
+            } catch (error) {
+                console.error('Import error:', error);
+                showNotification('Failed to import data. Please check the file format.', 'error');
+            }
+        };
+        reader.readAsText(file);
+    };
+    
+    /**
+     * Clear all user data
+     */
+    /**
+     * Clear all user data
+     */
+    const clearAllData = () => {
+        StorageUtil.removeItem('incomes');
+        StorageUtil.removeItem('expenses');
+        StorageUtil.removeItem('budgets');
+        
+        // Reset to default settings
+        appSettings = {
+            currency: 'INR',
+            theme: 'light',
+            language: 'en'
+        };
+        saveSettings();
+        applyTheme('light');
+        
+        // Refresh the current page
+        renderPage(currentPage);
+    };
+
     /**
      * Save application settings
      */
     const saveSettings = () => {
         StorageUtil.setItem('appSettings', appSettings);
-        updateSettingsUI();
     };
-    
-    /**
-     * Update UI based on settings
-     */
-    const updateSettingsUI = () => {
-        // Update currency selector
-        if (elements.currencySelector) {
-            elements.currencySelector.value = appSettings.currency;
-        }
-        
-        // Update notification bell
-        if (elements.notificationBell) {
-            elements.notificationBell.classList.toggle('active', appSettings.notificationsEnabled);
-        }
-        
-        // Apply theme
-        applyTheme(appSettings.theme);
-    };
-    
+
     /**
      * Apply theme to the application
      * @param {string} theme - The theme to apply ('light' or 'dark')
@@ -1316,364 +1462,63 @@ const App = (() => {
     const applyTheme = (theme) => {
         document.body.classList.remove('light-theme', 'dark-theme');
         document.body.classList.add(`${theme}-theme`);
-        
-        // Update theme toggle if it exists
-        if (elements.themeToggle) {
-            elements.themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
-        }
     };
-    
-    /**
-     * Update the user profile UI
-     */
-    const updateUserProfileUI = () => {
-        if (!elements.userProfileArea || !currentUser) return;
-        
-        elements.userProfileArea.innerHTML = `
-            <img src="${currentUser.avatar}" alt="${currentUser.name}" class="user-avatar">
-            <span class="user-name">${currentUser.name}</span>
-        `;
-    };
-    
-    /**
-     * Update date display
-     */
-    const updateDateDisplay = () => {
-        if (!elements.dateDisplay) return;
-        
-        const now = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        elements.dateDisplay.textContent = now.toLocaleDateString('en-US', options);
-    };
-    
+
     /**
      * Format currency based on current settings
      * @param {number} amount - The amount to format
      * @returns {string} Formatted currency string
      */
     const formatCurrency = (amount) => {
-        const currency = appSettings.currency || 'USD';
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: currency
-        }).format(amount);
+        const currency = appSettings.currency || 'INR';
+        const symbols = {
+            'USD': '$',
+            'EUR': '€', 
+            'GBP': '£',
+            'JPY': '¥',
+            'INR': '₹',
+            'CAD': '$',
+            'AUD': '$'
+        };
+        
+        const symbol = symbols[currency] || currency;
+        return `${symbol}${amount.toLocaleString()}`;
     };
     
+    /**
+     * Show notification to user
+     */
+    const showNotification = (message, type = 'success') => {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.textContent = message;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: ${type === 'error' ? '#f44336' : '#4caf50'};
+            color: white;
+            border-radius: 4px;
+            z-index: 10000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 3000);
+    };
+
     // Public API
     return {
         init,
         navigateToPage,
-        formatCurrency
+        formatCurrency,
+        showNotification
     };
 })();
 
 // Initialize the application when DOM is ready
 document.addEventListener('DOMContentLoaded', App.init);
-
-/**
- * CashBoard - Main Application
- * Initializes components and handles application-wide functionality
- */
-
-// Initialize on DOM content loaded
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('CashBoard App initializing...');
-    
-    // Initialize UI components
-    initNavigation();
-    initModals();
-    initToasts();
-    
-    // Check if first time setup is needed
-    const settings = StorageUtil.getData(StorageUtil.KEYS.SETTINGS);
-    if (settings && settings.firstTimeSetup) {
-        showFirstTimeSetup();
-    }
-    
-    // Apply theme based on settings
-    applyTheme();
-});
-
-/**
- * Initialize navigation between sections
- */
-function initNavigation() {
-    const navLinks = document.querySelectorAll('nav ul li a');
-    const sections = document.querySelectorAll('main > section');
-    
-    // Handle navigation click
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Get target section id from href
-            const targetId = this.getAttribute('href').substring(1);
-            
-            // Remove active class from all links and sections
-            navLinks.forEach(link => link.classList.remove('active'));
-            sections.forEach(section => section.classList.remove('section-active'));
-            
-            // Add active class to clicked link and target section
-            this.classList.add('active');
-            document.getElementById(targetId).classList.add('section-active');
-            
-            // Update URL hash without scrolling
-            history.pushState(null, null, '#' + targetId);
-        });
-    });
-    
-    // Handle direct navigation from URL hash
-    if (window.location.hash) {
-        const targetId = window.location.hash.substring(1);
-        const targetLink = document.querySelector(`nav ul li a[href="#${targetId}"]`);
-        if (targetLink) {
-            targetLink.click();
-        }
-    }
-}
-
-/**
- * Initialize modal functionality
- */
-function initModals() {
-    // Get all modal elements
-    const modals = document.querySelectorAll('.modal');
-    const modalTriggers = document.querySelectorAll('[data-target]');
-    const closeButtons = document.querySelectorAll('.close-modal, .cancel-modal');
-    
-    // Open modal when trigger is clicked
-    modalTriggers.forEach(trigger => {
-        trigger.addEventListener('click', function() {
-            const targetModal = document.getElementById(this.dataset.target);
-            if (targetModal) {
-                targetModal.classList.add('active');
-                document.body.style.overflow = 'hidden'; // Prevent background scrolling
-            }
-        });
-    });
-    
-    // Close modal when close button is clicked
-    closeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const modal = this.closest('.modal');
-            if (modal) {
-                modal.classList.remove('active');
-                document.body.style.overflow = ''; // Restore scrolling
-            }
-        });
-    });
-    
-    // Close modal when clicking outside of modal content
-    modals.forEach(modal => {
-        modal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
-    });
-    
-    // Close modal on Escape key press
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            modals.forEach(modal => {
-                if (modal.classList.contains('active')) {
-                    modal.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            });
-        }
-    });
-}
-
-/**
- * Initialize toast notifications
- */
-function initToasts() {
-    // Toast container should already exist in the HTML
-    if (!document.getElementById('toast-container')) {
-        const toastContainer = document.createElement('div');
-        toastContainer.id = 'toast-container';
-        toastContainer.className = 'toast-container';
-        document.body.appendChild(toastContainer);
-    }
-}
-
-/**
- * Show a toast notification
- * @param {string} message - Toast message
- * @param {string} type - Toast type: success, error, warning, info
- * @param {number} duration - Duration in milliseconds
- */
-function showToast(message, type = 'info', duration = 3000) {
-    const toastContainer = document.getElementById('toast-container');
-    
-    // Create toast element
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    
-    // Set toast content
-    toast.innerHTML = `
-        <div class="toast-header">
-            <span class="toast-title">${type.charAt(0).toUpperCase() + type.slice(1)}</span>
-            <button type="button" class="toast-close">&times;</button>
-        </div>
-        <div class="toast-body">
-            ${message}
-        </div>
-    `;
-    
-    // Add toast to container
-    toastContainer.appendChild(toast);
-    
-    // Show toast with animation
-    setTimeout(() => toast.classList.add('show'), 10);
-    
-    // Setup auto removal after duration
-    const timeout = setTimeout(() => {
-        removeToast(toast);
-    }, duration);
-    
-    // Close button functionality
-    const closeButton = toast.querySelector('.toast-close');
-    closeButton.addEventListener('click', () => {
-        clearTimeout(timeout);
-        removeToast(toast);
-    });
-}
-
-/**
- * Remove a toast with animation
- * @param {HTMLElement} toast - Toast element to remove
- */
-function removeToast(toast) {
-    toast.classList.add('hiding');
-    toast.classList.remove('show');
-    
-    // Remove from DOM after animation completes
-    setTimeout(() => {
-        if (toast.parentNode) {
-            toast.parentNode.removeChild(toast);
-        }
-    }, 300);
-}
-
-/**
- * Show first time setup guidance
- */
-function showFirstTimeSetup() {
-    const welcomeMessage = `
-        <div class="welcome-message">
-            <h3>Welcome to CashBoard!</h3>
-            <p>Your personal finance dashboard is ready to use. Here's how to get started:</p>
-            <ol>
-                <li>Add your income sources</li>
-                <li>Track your expenses</li>
-                <li>View the auto-generated budget suggestions</li>
-                <li>Explore the reports section for insights</li>
-            </ol>
-            <p>All your data stays on your device - we respect your privacy!</p>
-        </div>
-    `;
-    
-    showModal('Welcome', welcomeMessage, () => {
-        // Update settings to mark first time setup as complete
-        const settings = StorageUtil.getData(StorageUtil.KEYS.SETTINGS, StorageUtil.DEFAULT_SETTINGS);
-        settings.firstTimeSetup = false;
-        StorageUtil.saveData(StorageUtil.KEYS.SETTINGS, settings);
-    });
-}
-
-/**
- * Show a custom modal
- * @param {string} title - Modal title
- * @param {string} content - Modal content (HTML)
- * @param {Function} onClose - Callback when modal is closed
- */
-function showModal(title, content, onClose = null) {
-    // Check if custom modal already exists
-    let customModal = document.getElementById('custom-modal');
-    
-    // Create modal if it doesn't exist
-    if (!customModal) {
-        customModal = document.createElement('div');
-        customModal.id = 'custom-modal';
-        customModal.className = 'modal';
-        
-        customModal.innerHTML = `
-            <div class="modal-content">
-                <span class="close-modal">&times;</span>
-                <h3 id="custom-modal-title"></h3>
-                <div id="custom-modal-content"></div>
-                <div class="form-actions">
-                    <button type="button" class="btn-primary" id="custom-modal-ok">OK</button>
-                </div>
-            </div>
-        `;
-        
-        document.body.appendChild(customModal);
-        
-        // Setup close button
-        const closeBtn = customModal.querySelector('.close-modal');
-        const okBtn = customModal.querySelector('#custom-modal-ok');
-        
-        closeBtn.addEventListener('click', () => {
-            customModal.classList.remove('active');
-            document.body.style.overflow = '';
-            if (onClose) onClose();
-        });
-        
-        okBtn.addEventListener('click', () => {
-            customModal.classList.remove('active');
-            document.body.style.overflow = '';
-            if (onClose) onClose();
-        });
-        
-        // Close modal when clicking outside content
-        customModal.addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('active');
-                document.body.style.overflow = '';
-                if (onClose) onClose();
-            }
-        });
-    }
-    
-    // Update modal content
-    document.getElementById('custom-modal-title').textContent = title;
-    document.getElementById('custom-modal-content').innerHTML = content;
-    
-    // Show modal
-    customModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-/**
- * Apply theme based on user settings
- */
-function applyTheme() {
-    const settings = StorageUtil.getData(StorageUtil.KEYS.SETTINGS, StorageUtil.DEFAULT_SETTINGS);
-    const { theme } = settings;
-    
-    if (theme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-    } else if (theme === 'light') {
-        document.documentElement.setAttribute('data-theme', 'light');
-    } else if (theme === 'system') {
-        // Check system preference
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
-        
-        // Listen for changes in system preference
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-            document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-        });
-    }
-}
-
-// Export functions for other modules to use
-window.CashBoard = {
-    showToast,
-    showModal,
-    applyTheme
-};

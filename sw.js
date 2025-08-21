@@ -3,7 +3,7 @@
  * Basic offline functionality and caching
  */
 
-const CACHE_NAME = 'cashboard-v2';
+const CACHE_NAME = 'cashboard-v3';
 
 // Files to cache for offline use
 const FILES_TO_CACHE = [
@@ -14,7 +14,6 @@ const FILES_TO_CACHE = [
   '/js/app.js',
   '/js/utils/storage.js',
   '/js/services/dataService.js',
-  '/js/services/cashbotService.js',
   '/js/components/ui.js',
   '/js/components/charts.js',
   '/manifest.json'

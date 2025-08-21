@@ -191,6 +191,29 @@ section.section-active {
   display: block;
 }
 
+/* ===== Section Headers ===== */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-l);
+  padding-bottom: var(--spacing-m);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-header h2 {
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+
+.page-title {
+  font-size: var(--font-size-xxlarge);
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-l);
+  text-align: center;
+}
+
 /* ===== Buttons ===== */
 .btn-primary,
 .btn-secondary,
@@ -385,6 +408,77 @@ tr:hover {
   background-color: rgba(0, 0, 0, 0.01);
 }
 
+.table-wrapper {
+  background-color: var(--background-light);
+  border-radius: var(--border-radius-m);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  margin-top: var(--spacing-m);
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xxl);
+  color: var(--text-secondary);
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-m);
+  opacity: 0.5;
+}
+
+/* Transaction List Styles */
+.transaction-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-m);
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color var(--transition-fast);
+}
+
+.transaction-item:hover {
+  background-color: var(--background-gray);
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.transaction-details {
+  flex-grow: 1;
+}
+
+.transaction-title {
+  font-weight: 500;
+  margin-bottom: var(--spacing-xs);
+}
+
+.transaction-meta {
+  font-size: var(--font-size-small);
+  color: var(--text-secondary);
+}
+
+.transaction-amount {
+  font-weight: 600;
+  font-size: var(--font-size-large);
+}
+
+.transaction-amount.income {
+  color: var(--primary-color);
+}
+
+.transaction-amount.expense {
+  color: var(--warning-color);
+}
+
 /* ===== Dashboard Specific ===== */
 .dashboard-header {
   display: flex;
@@ -479,53 +573,6 @@ tr:hover {
   height: 300px;
   width: 100%;
 }
-
-/* Smart Allocation */
-.smart-allocation {
-  background-color: var(--background-light);
-  border-radius: var(--border-radius-m);
-  padding: var(--spacing-l);
-  box-shadow: var(--box-shadow);
-  margin-bottom: var(--spacing-l);
-}
-
-.smart-allocation h3 {
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: var(--spacing-xs);
-  margin-bottom: var(--spacing-l);
-  color: var(--primary-color);
-}
-
-.allocation-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: var(--spacing-m);
-}
-
-.allocation-card {
-  background-color: rgba(76, 175, 80, 0.05);
-  border-radius: var(--border-radius-m);
-  padding: var(--spacing-m);
-  border-left: 4px solid var(--primary-color);
-  display: flex;
-  flex-direction: column;
-  transition: transform var(--transition-fast);
-}
-
-.allocation-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--box-shadow);
-}
-
-.allocation-card .icon { font-size: 2rem; margin-bottom: var(--spacing-xs); }
-.allocation-card .category { font-weight: 500; margin-bottom: var(--spacing-xs); }
-.allocation-card .amount { font-size: var(--font-size-large); font-weight: 600; margin-bottom: var(--spacing-xs); }
-.allocation-card .percentage { color: var(--text-secondary); font-size: var(--font-size-small); }
-
-.allocation-card.savings { background-color: rgba(76, 175, 80, 0.05); border-left-color: var(--primary-color); }
-.allocation-card.investment { background-color: rgba(33, 150, 243, 0.05); border-left-color: var(--secondary-color); }
-.allocation-card.emergency { background-color: rgba(244, 67, 54, 0.05); border-left-color: var(--warning-color); }
-.allocation-card.leisure { background-color: rgba(255, 152, 0, 0.05); border-left-color: var(--accent-color); }
 
 /* ===== Modals ===== */
 .modal {
@@ -862,9 +909,215 @@ tr:hover {
   .form-actions button {
     width: 100%;
   }
+}
+
+/* ===== Reports Section ===== */
+.report-filters {
+  display: flex;
+  gap: var(--spacing-l);
+  margin-bottom: var(--spacing-l);
+  padding: var(--spacing-m);
+  background: var(--background-gray);
+  border-radius: var(--border-radius-m);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-s);
+}
+
+.filter-group label {
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: var(--spacing-s) var(--spacing-m);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-s);
+  background: var(--background-light);
+}
+
+.reports-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--spacing-l);
+  margin-top: var(--spacing-l);
+}
+
+.report-card {
+  background: var(--background-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-m);
+  padding: var(--spacing-l);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition-normal);
+}
+
+.report-card:hover {
+  box-shadow: var(--box-shadow-hover);
+  transform: translateY(-2px);
+}
+
+.report-card h3 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-m);
+  font-size: var(--font-size-large);
+  font-weight: 600;
+}
+
+.report-chart {
+  width: 100%;
+  height: 300px;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-m);
+}
+
+.stat-item {
+  text-align: center;
+  padding: var(--spacing-m);
+  background: var(--background-gray);
+  border-radius: var(--border-radius-s);
+}
+
+.stat-item h4 {
+  margin: 0 0 var(--spacing-s) 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-small);
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: var(--font-size-large);
+  font-weight: 600;
+  margin: 0;
+}
+
+.stat-value.income {
+  color: var(--primary-color);
+}
+
+.stat-value.expense {
+  color: var(--warning-color);
+}
+
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--spacing-l);
+  margin-top: var(--spacing-l);
+}
+
+/* ===== Settings Section ===== */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-l);
+  margin-bottom: var(--spacing-l);
+}
+
+.settings-card {
+  background: var(--background-light);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-m);
+  padding: var(--spacing-l);
+  box-shadow: var(--box-shadow);
+}
+
+.settings-card h3 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-m);
+  font-size: var(--font-size-large);
+  font-weight: 600;
+  border-bottom: 2px solid var(--primary-light);
+  padding-bottom: var(--spacing-s);
+}
+
+.theme-selector {
+  display: flex;
+  gap: var(--spacing-s);
+  margin-top: var(--spacing-s);
+}
+
+.theme-btn {
+  padding: var(--spacing-s) var(--spacing-m);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-s);
+  background: var(--background-light);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-weight: 500;
+}
+
+.theme-btn:hover {
+  border-color: var(--primary-color);
+  background: var(--primary-light);
+}
+
+.theme-btn.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.data-management .form-group {
+  margin-bottom: var(--spacing-m);
+}
+
+.btn-danger {
+  background: var(--warning-color);
+  color: white;
+  border: none;
+  padding: var(--spacing-m) var(--spacing-l);
+  border-radius: var(--border-radius-s);
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.btn-danger:hover {
+  background: #D32F2F;
+  transform: translateY(-1px);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--spacing-l);
+  padding-top: var(--spacing-l);
+  border-top: 1px solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+  .report-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
   
-  .allocation-cards {
+  .filter-group {
+    justify-content: space-between;
+  }
+  
+  .reports-container {
     grid-template-columns: 1fr;
+  }
+  
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .theme-selector {
+    flex-direction: column;
   }
 }
 

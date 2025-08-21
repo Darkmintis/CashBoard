@@ -117,47 +117,6 @@
                             <canvas id="expense-breakdown-chart" class="chart"></canvas>
                         </div>
                     </div>
-
-                    <div class="smart-allocation">
-                        <h3>CashBot Smart Allocation</h3>
-                        <p class="allocation-intro">Based on your financial profile, here's how your money should be allocated:</p>
-                        <div class="allocation-cards">
-                            <div class="allocation-card savings">
-                                <i class="icon fas fa-piggy-bank"></i>
-                                <div class="category">Savings</div>
-                                <div class="amount">₹0.00</div>
-                                <div class="percentage">20% of income</div>
-                            </div>
-                            <div class="allocation-card investment">
-                                <i class="icon fas fa-chart-line"></i>
-                                <div class="category">Investment</div>
-                                <div class="amount">₹0.00</div>
-                                <div class="percentage">10% of income</div>
-                            </div>
-                            <div class="allocation-card emergency">
-                                <i class="icon fas fa-first-aid"></i>
-                                <div class="category">Emergency Fund</div>
-                                <div class="amount">₹0.00</div>
-                                <div class="percentage">5% of income</div>
-                            </div>
-                            <div class="allocation-card leisure">
-                                <i class="icon fas fa-umbrella-beach"></i>
-                                <div class="category">Leisure</div>
-                                <div class="amount">₹0.00</div>
-                                <div class="percentage">5% of income</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tips-container">
-                        <h3>CashBot Tips</h3>
-                        <div class="tip-card success">
-                            <div class="tip-icon"><i class="fas fa-lightbulb"></i></div>
-                            <div class="tip-content">
-                                <p class="tip-message">Add your income and expenses to get personalized financial insights.</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
 
@@ -350,22 +309,6 @@
                                 <button class="btn-danger full-width" id="clear-data">Clear All Data</button>
                             </div>
                         </div>
-
-                        <div class="settings-card">
-                            <h3>CashBot Settings</h3>
-                            <div class="form-group">
-                                <label for="savings-target">Monthly Savings Target (%)</label>
-                                <input type="range" id="savings-target" min="5" max="50" step="1" value="20">
-                                <div class="range-value"><span id="savings-target-value">20%</span></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="CashBot-tips">CashBot Tips</label>
-                                <div class="toggle-switch">
-                                    <input type="checkbox" id="CashBot-tips" checked>
-                                    <span class="toggle-slider"></span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="form-actions">
@@ -474,7 +417,6 @@
     <!-- JavaScript Files -->
     <script src="js/utils/storage.js"></script>
     <script src="js/services/dataService.js"></script>
-    <script src="js/services/cashbotService.js"></script>
     <script src="js/components/ui.js"></script>
     <script src="js/components/charts.js"></script>
     <script src="js/app.js"></script>
