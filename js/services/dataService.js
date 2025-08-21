@@ -1,5 +1,5 @@
 /**
- * KashBoard Data Service
+ * CashBoard Data Service
  * Handles data operations for income, expenses, and budgets
  */
 

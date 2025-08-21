@@ -1,4 +1,4 @@
-/* KashBoard Dashboard Styles */
+/* CashBoard Dashboard Styles */
 
 /* ===== Dashboard Header ===== */
 .dashboard-header {
@@ -219,7 +219,7 @@
   left: 0;
 }
 
-/* KashBot Tips */
+/* CashBot Tips */
 .tips-container {
   margin-top: var(--spacing-l);
 }

@@ -20,7 +20,7 @@ python -m http.server 3000
 # Then visit http://localhost:3000
 ```
 
-## 🧠 What is KashBoard?
+## 🧠 What is CashBoard?
 
 CashBoard is a local-first, privacy-respecting personal finance dashboard that helps users manage income, track expenses, and automatically suggest savings, investments, and lifestyle budgets — without storing any data on external servers.
 
@@ -34,7 +34,7 @@ CashBoard is a local-first, privacy-respecting personal finance dashboard that h
 - Add categories: food, rent, transport, education, subscriptions, etc.
 - Optional notes, receipts (image or PDF), or tags
 
-### 3. Smart Allocation Engine (KashBot Module)
+### 3. Smart Allocation Engine (CashBot Module)
 Based on income – expenses, auto-suggest:
 - 📥 Savings goal suggestion (20% rule, customizable)
 - 📈 Investment bucket (based on risk preference, if extended)
@@ -65,7 +65,7 @@ Based on income – expenses, auto-suggest:
 ## 🌟 Unique Selling Points (USP)
 
 - 🔒 **100% Local Data Control** - Your data never leaves your device
-- 🧠 **Smart Budgeting Intelligence** - KashBot AI without cloud dependency
+- 🧠 **Smart Budgeting Intelligence** - CashBot AI without cloud dependency
 - 🚫 **No Tracking, No Ads** - Completely privacy-respecting
 - 📱 **Progressive Web App** - Install like a native app
 - ⚡ **Offline-First** - Works without internet connection

@@ -1,5 +1,5 @@
 /**
- * KashBoard Application
+ * CashBoard Application
  * Main application file that initializes and orchestrates the personal finance dashboard
  */
 
@@ -31,7 +31,7 @@ const App = (() => {
      * Initialize the application
      */
     const init = () => {
-        console.log('Initializing KashBoard application...');
+        console.log('Initializing CashBoard application...');
         
         // Load user data and settings
         loadUserData();
@@ -53,7 +53,7 @@ const App = (() => {
             elements.loader.style.display = 'none';
         }
         
-        console.log('KashBoard initialization complete');
+        console.log('CashBoard initialization complete');
     };
     
     /**
@@ -87,7 +87,7 @@ const App = (() => {
         const demoUser = {
             id: 'demo-user',
             name: 'Demo User',
-            email: 'demo@kashboard.app',
+            email: 'demo@CashBoard.app',
             avatar: 'images/default-avatar.png',
             createdAt: new Date().toISOString()
         };
@@ -307,8 +307,8 @@ const App = (() => {
         
         // Get financial data
         const financialSummary = DataService.getFinancialSummary();
-        const allocations = KashBotService.generateAllocations(financialSummary, appSettings);
-        const tips = KashBotService.generateTips(financialSummary, allocations);
+        const allocations = CashBotService.generateAllocations(financialSummary, appSettings);
+        const tips = CashBotService.generateTips(financialSummary, allocations);
         
         let html = `
             <div class="dashboard-container">
@@ -333,14 +333,14 @@ const App = (() => {
                 
                 <div class="dashboard-sections">
                     <div class="section allocation-section">
-                        <h2>KashBot Allocation</h2>
+                        <h2>CashBot Allocation</h2>
                         <div class="allocation-container">
                             ${renderAllocationChart(allocations)}
                         </div>
                     </div>
                     
                     <div class="section tips-section">
-                        <h2>KashBot Tips</h2>
+                        <h2>CashBot Tips</h2>
                         <div class="tips-container">
                             ${renderTips(tips)}
                         </div>
@@ -1220,7 +1220,7 @@ const App = (() => {
         // Create download link
         const downloadLink = document.createElement('a');
         downloadLink.href = dataUrl;
-        downloadLink.download = `kashboard-export-${new Date().toISOString().slice(0, 10)}.json`;
+        downloadLink.download = `CashBoard-export-${new Date().toISOString().slice(0, 10)}.json`;
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
@@ -1371,13 +1371,13 @@ const App = (() => {
 document.addEventListener('DOMContentLoaded', App.init);
 
 /**
- * KashBoard - Main Application
+ * CashBoard - Main Application
  * Initializes components and handles application-wide functionality
  */
 
 // Initialize on DOM content loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('KashBoard App initializing...');
+    console.log('CashBoard App initializing...');
     
     // Initialize UI components
     initNavigation();
@@ -1564,7 +1564,7 @@ function removeToast(toast) {
 function showFirstTimeSetup() {
     const welcomeMessage = `
         <div class="welcome-message">
-            <h3>Welcome to KashBoard!</h3>
+            <h3>Welcome to CashBoard!</h3>
             <p>Your personal finance dashboard is ready to use. Here's how to get started:</p>
             <ol>
                 <li>Add your income sources</li>
@@ -1672,7 +1672,7 @@ function applyTheme() {
 }
 
 // Export functions for other modules to use
-window.KashBoard = {
+window.CashBoard = {
     showToast,
     showModal,
     applyTheme

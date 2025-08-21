@@ -1,5 +1,5 @@
 /**
- * KashBoard Data Models
+ * CashBoard Data Models
  * Models for income, expenses, and budgets
  */
 

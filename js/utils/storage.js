@@ -1,14 +1,14 @@
 /**
- * KashBoard Storage Utility
+ * CashBoard Storage Utility
  * Handles local storage operations for persistent data
  */
 
 const StorageKeys = {
-    INCOME: 'kashboard_income',
-    EXPENSES: 'kashboard_expenses',
-    BUDGETS: 'kashboard_budgets',
-    SETTINGS: 'kashboard_settings',
-    USER: 'kashboard_user'
+    INCOME: 'cashboard_income',
+    EXPENSES: 'cashboard_expenses',
+    BUDGETS: 'cashboard_budgets',
+    SETTINGS: 'cashboard_settings',
+    USER: 'cashboard_user'
 };
 
 /**
@@ -251,7 +251,7 @@ const StorageUtil = {
         notifications: true,
         dateFormat: 'DD/MM/YYYY',
         savingsTarget: 20,
-        kashbotTips: true,
+        cashbotTips: true,
         firstTimeSetup: true
     },
     
@@ -425,7 +425,7 @@ const StorageUtil = {
         // Create filename with date
         const date = new Date();
         const dateStr = date.toISOString().split('T')[0];
-        const filename = `kashboard_backup_${dateStr}.json`;
+        const filename = `cashboard_backup_${dateStr}.json`;
         
         // Trigger download
         a.href = url;

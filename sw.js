@@ -1,9 +1,9 @@
 /**
- * KashBoard Service Worker
+ * CashBoard Service Worker
  * Basic offline functionality and caching
  */
 
-const CACHE_NAME = 'kashboard-v1';
+const CACHE_NAME = 'CashBoard-v1';
 
 // Files to cache for offline use
 const FILES_TO_CACHE = [
@@ -17,7 +17,7 @@ const FILES_TO_CACHE = [
   '/js/utils/storage.js',
   '/js/models/models.js',
   '/js/services/dataService.js',
-  '/js/services/kashbotService.js',
+  '/js/services/cashbotService.js',
   '/js/components/ui.js',
   '/js/components/charts.js',
   '/manifest.json'

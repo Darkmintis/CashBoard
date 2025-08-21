@@ -1,5 +1,5 @@
 /**
- * KashBoard Charts Component
+ * CashBoard Charts Component
  * Handles chart rendering and visualization
  */
 

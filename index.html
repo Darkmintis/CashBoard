@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KashBoard - Smart Finance Management</title>
+    <title>CashBoard - Smart Finance Management</title>
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="Your Private Money Mentor. No Cloud. No Ads. Just Clarity. Track income, manage expenses, and get smart financial insights.">
     <meta name="keywords" content="personal finance, budgeting, expense tracking, money management, financial dashboard, privacy-first">
-    <meta name="author" content="KashBoard">
+    <meta name="author" content="CashBoard">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://kashboard.app/">
-    <meta property="og:title" content="KashBoard - Smart Finance Management">
+    <meta property="og:url" content="https://cashboard.app/">
+    <meta property="og:title" content="CashBoard - Smart Finance Management">
     <meta property="og:description" content="Your Private Money Mentor. No Cloud. No Ads. Just Clarity.">
-    <meta property="og:image" content="images/kashboard-preview.png">
+    <meta property="og:image" content="images/cashboard-preview.png">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://kashboard.app/">
-    <meta property="twitter:title" content="KashBoard - Smart Finance Management">
+    <meta property="twitter:url" content="https://cashboard.app/">
+    <meta property="twitter:title" content="CashBoard - Smart Finance Management">
     <meta property="twitter:description" content="Your Private Money Mentor. No Cloud. No Ads. Just Clarity.">
-    <meta property="twitter:image" content="images/kashboard-preview.png">
+    <meta property="twitter:image" content="images/cashboard-preview.png">
     
     <!-- PWA Configuration -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#4CAF50">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="KashBoard">
+    <meta name="apple-mobile-web-app-title" content="CashBoard">
     <link rel="apple-touch-icon" href="images/icon-192x192.png">
     
     <!-- Favicons -->
@@ -62,7 +62,7 @@
         <header>
             <div class="container">
                 <div class="logo">
-                    <h1>KashBoard</h1>
+                    <h1>CashBoard</h1>
                     <p class="tagline">Smart Finance Management</p>
                 </div>
                 <nav>
@@ -121,7 +121,7 @@
                     </div>
 
                     <div class="smart-allocation">
-                        <h3>KashBot Smart Allocation</h3>
+                        <h3>CashBot Smart Allocation</h3>
                         <p class="allocation-intro">Based on your financial profile, here's how your money should be allocated:</p>
                         <div class="allocation-cards">
                             <div class="allocation-card savings">
@@ -152,7 +152,7 @@
                     </div>
 
                     <div class="tips-container">
-                        <h3>KashBot Tips</h3>
+                        <h3>CashBot Tips</h3>
                         <div class="tip-card success">
                             <div class="tip-icon"><i class="fas fa-lightbulb"></i></div>
                             <div class="tip-content">
@@ -354,16 +354,16 @@
                         </div>
 
                         <div class="settings-card">
-                            <h3>KashBot Settings</h3>
+                            <h3>CashBot Settings</h3>
                             <div class="form-group">
                                 <label for="savings-target">Monthly Savings Target (%)</label>
                                 <input type="range" id="savings-target" min="5" max="50" step="1" value="20">
                                 <div class="range-value"><span id="savings-target-value">20%</span></div>
                             </div>
                             <div class="form-group">
-                                <label for="kashbot-tips">KashBot Tips</label>
+                                <label for="CashBot-tips">CashBot Tips</label>
                                 <div class="toggle-switch">
-                                    <input type="checkbox" id="kashbot-tips" checked>
+                                    <input type="checkbox" id="CashBot-tips" checked>
                                     <span class="toggle-slider"></span>
                                 </div>
                             </div>
@@ -379,7 +379,7 @@
 
         <footer>
             <div class="container">
-                <p>&copy; 2025 KashBoard. Smart Finance Management.</p>
+                <p>&copy; 2025 CashBoard. Smart Finance Management.</p>
             </div>
         </footer>
     </div>
@@ -477,7 +477,7 @@
     <script src="js/utils/storage.js"></script>
     <script src="js/models/models.js"></script>
     <script src="js/services/dataService.js"></script>
-    <script src="js/services/kashbotService.js"></script>
+    <script src="js/services/CashBotService.js"></script>
     <script src="js/components/ui.js"></script>
     <script src="js/components/charts.js"></script>
     <script src="js/app.js"></script>
@@ -518,7 +518,7 @@
                 banner.innerHTML = `
                     <div class="install-content">
                         <i class="fas fa-download"></i>
-                        <span>Install KashBoard for a better experience</span>
+                        <span>Install CashBoard for a better experience</span>
                         <button id="install-btn" class="install-btn">Install</button>
                         <button id="dismiss-btn" class="dismiss-btn">&times;</button>
                     </div>
@@ -557,7 +557,7 @@
 
         // App installation success
         window.addEventListener('appinstalled', (evt) => {
-            console.log('KashBoard was installed');
+            console.log('CashBoard was installed');
             // Hide install promotion
             const banner = document.getElementById('install-banner');
             if (banner) banner.style.display = 'none';

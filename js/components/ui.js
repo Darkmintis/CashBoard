@@ -1,5 +1,5 @@
 /**
- * KashBoard UI Component
+ * CashBoard UI Component
  * Handles UI-related functionality and interactions
  */
 
@@ -84,7 +84,7 @@ const UIComponent = (function() {
             
             // Validate form data
             if (!formData.date || !formData.category || !formData.description || isNaN(formData.amount)) {
-                window.KashBoard.showToast('Please fill out all required fields', 'error');
+                window.CashBoard.showToast('Please fill out all required fields', 'error');
                 return;
             }
             
@@ -92,7 +92,7 @@ const UIComponent = (function() {
             DataService.addIncome(formData);
             
             // Show success message
-            window.KashBoard.showToast('Income added successfully', 'success');
+            window.CashBoard.showToast('Income added successfully', 'success');
             
             // Reset form and close modal
             incomeForm.reset();
@@ -129,7 +129,7 @@ const UIComponent = (function() {
             
             // Validate form data
             if (!formData.date || !formData.category || !formData.description || isNaN(formData.amount)) {
-                window.KashBoard.showToast('Please fill out all required fields', 'error');
+                window.CashBoard.showToast('Please fill out all required fields', 'error');
                 return;
             }
             
@@ -137,7 +137,7 @@ const UIComponent = (function() {
             DataService.addExpense(formData);
             
             // Show success message
-            window.KashBoard.showToast('Expense added successfully', 'success');
+            window.CashBoard.showToast('Expense added successfully', 'success');
             
             // Reset form and close modal
             expenseForm.reset();
@@ -162,7 +162,7 @@ const UIComponent = (function() {
         
         // Check file size (limit to 2MB)
         if (file.size > 2 * 1024 * 1024) {
-            window.KashBoard.showToast('Receipt file size exceeds 2MB limit', 'error');
+            window.CashBoard.showToast('Receipt file size exceeds 2MB limit', 'error');
             e.target.value = '';
             return;
         }
@@ -170,7 +170,7 @@ const UIComponent = (function() {
         // Check file type
         const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf'];
         if (!validTypes.includes(file.type)) {
-            window.KashBoard.showToast('Please select an image or PDF file', 'error');
+            window.CashBoard.showToast('Please select an image or PDF file', 'error');
             e.target.value = '';
             return;
         }
@@ -182,7 +182,7 @@ const UIComponent = (function() {
             e.target.dataset.receipt = base64String;
         };
         reader.onerror = function() {
-            window.KashBoard.showToast('Error processing receipt file', 'error');
+            window.CashBoard.showToast('Error processing receipt file', 'error');
         };
         reader.readAsDataURL(file);
     }
@@ -301,10 +301,10 @@ const UIComponent = (function() {
                 if (confirm('Are you sure you want to delete this entry?')) {
                     if (type === 'income') {
                         DataService.deleteIncome(id);
-                        window.KashBoard.showToast('Income entry deleted', 'success');
+                        window.CashBoard.showToast('Income entry deleted', 'success');
                     } else if (type === 'expense') {
                         DataService.deleteExpense(id);
-                        window.KashBoard.showToast('Expense entry deleted', 'success');
+                        window.CashBoard.showToast('Expense entry deleted', 'success');
                     }
                 }
             });
@@ -355,7 +355,7 @@ const UIComponent = (function() {
             
             // Validate form data
             if (!formData.date || !formData.category || !formData.description || isNaN(formData.amount)) {
-                window.KashBoard.showToast('Please fill out all required fields', 'error');
+                window.CashBoard.showToast('Please fill out all required fields', 'error');
                 return;
             }
             
@@ -363,7 +363,7 @@ const UIComponent = (function() {
             DataService.updateIncome(id, formData);
             
             // Show success message
-            window.KashBoard.showToast('Income updated successfully', 'success');
+            window.CashBoard.showToast('Income updated successfully', 'success');
             
             // Reset form and close modal
             incomeForm.reset();
@@ -452,7 +452,7 @@ const UIComponent = (function() {
             
             // Validate form data
             if (!formData.date || !formData.category || !formData.description || isNaN(formData.amount)) {
-                window.KashBoard.showToast('Please fill out all required fields', 'error');
+                window.CashBoard.showToast('Please fill out all required fields', 'error');
                 return;
             }
             
@@ -460,7 +460,7 @@ const UIComponent = (function() {
             DataService.updateExpense(id, formData);
             
             // Show success message
-            window.KashBoard.showToast('Expense updated successfully', 'success');
+            window.CashBoard.showToast('Expense updated successfully', 'success');
             
             // Reset form and close modal
             expenseForm.reset();

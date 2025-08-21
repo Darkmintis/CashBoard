@@ -1,9 +1,9 @@
 /**
- * KashBot Service
- * Smart financial allocation engine for KashBoard
+ * CashBot Service
+ * Smart financial allocation engine for CashBoard
  */
 
-const KashBotService = (function() {
+const CashBotService = (function() {
     // Default allocation percentages
     const DEFAULT_ALLOCATIONS = {
         savings: 20,
